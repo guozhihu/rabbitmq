@@ -12,9 +12,12 @@ Producer & Consumer生产消费者<br>
 虚拟地址，用于进行逻辑隔离，最上层的消息路由  
 一个Virtual Host里面可以有若干个Exchange和Queue  
 同一个Virtual Host里面不能有相同名称的Exchange或Queue  
-
-## Exchange交换机详解
-相关代码参考exchange包<br>
+## Exchange交换机属性详解
+**相关代码参考exchange包**<br>
+* Name  
+交换机名称
+* Type  
+交换机类型<br>
 **Exchange在RabbitMQ消息中间件中的作用：**  
 服务器发送消息不会直接发送到队列中（Queue），而是直接发送给交换机（Exchange），
 然后根据确定的规则，RabbitMQ将会决定消息该投递到哪个队列。这些规则称为路由键
@@ -22,9 +25,8 @@ Producer & Consumer生产消费者<br>
 消息也有自己的路由键（也可以是空），RabbitMQ也会将消息和消息指定发送的交换机
 的绑定（binding，就是队列和交互机根据路由键映射的关系）的路由键进行匹配。如果
 匹配的话，就会将消息投递到相应的队列。  
-
-Exchange的类型主要有四种，Direct Exchange、Topic Exchange、Fanout Exchange、
-Headers Exchange，而常用的只有前三种。  
+**Exchange的类型主要有四种，Direct Exchange、Topic Exchange、Fanout Exchange、
+Headers Exchange，而常用的只有前三种。**  
 **Direct Exchange**  
 所有发送到Direct Exchange的消息都会被转发到RouteKey中指定的Queue。  
 1.一般情况可以使用rabbitMQ自带的Exchange："" (该Exchange的名字为空字符串，下文称其为default Exchange)。<br>
@@ -48,5 +50,25 @@ Fanout交换机转发消息是最快的
 4.如果接收到消息的Exchange没有与任何Queue绑定，则消息会被抛弃。<br>
 **Headers Exchange**  
 将消息中的headers与该Exchange相关联的所有Binging中的参数进行匹配，如果匹配上了，则发送到该Binding对应的Queue中。  
+* Durability  
+是否需要持久化，true为持久化
+* 其他属性
+**Auto Delete**：当最后一个绑定到Exchange上的队列删除后，自动删除该Exchange  
+**Internal**：当前Exchange是否用于RabbitMQ内部使用，默认为false  
+**Arguments**：扩展参数，用于扩展AMQP协议自制定化使用  
 
+## Binding-绑定
+Exchange和Exchange、Queue之间的连接关系  
+Binding中可以包含RoutingKey或者参数  
 
+## Queue-消息队列
+消息队列，实际存储消息数据  
+Durability：是否持久化，Durable：是，Transient：否  
+Auto delete：如选yes，代表当最后一个监听被移除之后，该Queue会自动被删除  
+
+## Message-消息
+服务器和应用程序之间传送的数据  
+本质上就是一段数据，由Properties和Payload(Body)组成  
+常用属性：delivery mode、headers(自定义属性)  
+其他属性：content_type、content_encoding、priority、correlation_id、reply_to、
+expiration、message_id、timestamp、type、user_id、app_id、cluster_id  
