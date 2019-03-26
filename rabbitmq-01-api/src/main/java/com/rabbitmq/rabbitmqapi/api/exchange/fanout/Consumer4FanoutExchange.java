@@ -19,9 +19,9 @@ public class Consumer4FanoutExchange {
         connectionFactory.setHost("mini1");
         connectionFactory.setPort(5672);
         connectionFactory.setVirtualHost("/");
-        
-        connectionFactory.setAutomaticRecoveryEnabled(true);
-        connectionFactory.setNetworkRecoveryInterval(3000);
+    
+        connectionFactory.setAutomaticRecoveryEnabled(true); // 设置允许自动重连
+        connectionFactory.setNetworkRecoveryInterval(3000); // 设置每3秒钟重连一次
         Connection connection = connectionFactory.newConnection();
         
         Channel channel = connection.createChannel();
