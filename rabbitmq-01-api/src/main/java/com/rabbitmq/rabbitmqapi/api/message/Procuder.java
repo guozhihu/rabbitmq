@@ -35,7 +35,7 @@ public class Procuder {
         // 在这里设置如何去发送一个带有附加属性的消息
         AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder()
             .deliveryMode(2) // 设置发送的消息是否是持久化消息，1为非持久化消息，2为持久化消息，持久化消息是指那些没有被消费者消费的消息在服务器重启后是否还存在
-            .contentEncoding("UTF-8") // 设置字符集
+            .contentEncoding("UTF-8") // 设置字符集编码
             .expiration("10000") // 设置过期时间，这里是10秒钟后过期
             .headers(headers) // 设置自定义属性
             .build();
