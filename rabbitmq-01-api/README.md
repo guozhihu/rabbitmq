@@ -104,3 +104,11 @@ prefetchSize: 消费的单条消息的大小限制，一般设置为0，表示�
 prefetchCount：会告诉RabbitMQ不要同时给一个消费者推送多于N个消息，即一旦有N个消息还没有ack，则该consumer将block掉，直到有消息ack<br>
 global：true/false是否将上面设置应用于channel，简单点说，就是上面限制是channel级别的还是consumer级别<br>
 
+## 消费端ACK与重回队列
+* **消费端的手工ACK和NACK**<br>
+消费端进行消费的时候，如果由于业务异常我们可以进行日志的记录，然后进行补偿！<br>
+如果由于服务器宕机等严重问题，那我们就需要手工进行ACK保障消费端消费成功！<br>
+* **消费端的重回队列**<br>
+消费端重回队列是为了对没有处理成功的消息，把消息重新递给Broker!<br>
+一般我们在实际应用中，都会关闭重回队列，也就是设置为false<br>
+
