@@ -112,3 +112,26 @@ global：true/false是否将上面设置应用于channel，简单点说，就是
 消费端重回队列是为了对没有处理成功的消息，把消息重新递给Broker!<br>
 一般我们在实际应用中，都会关闭重回队列，也就是设置为false<br>
 
+## 死信队列
+**死信队列：DLX, Dead-Letter-Exchange**<br>
+
+利用DLX，当消息在一个队列中变成死信（dead message）之后，它能被重新publish到另一个Exchange，这个Exchange就是DLX。<br>
+
+**消息变成死信有以下几种情况：**<br>
+1.消息被拒绝（basic.reject/basic.nack）并且requeue=false<br>
+2.消息TTL过期<br>
+3.队列达到最大长度<br>
+
+DLX也是一个正常的Exchange，和一般的Exchange没有区别，它能在任何的队列上被指定，实际上就是设置某个队列的属性。<br>
+当这个队列中有死信时，RabbitMQ就会自动的将这个消息重新发布到设置的Exchange上去，进而被路由到另一个队列。<br>
+可以监听这个队列中消息做相应的处理，这个特性可以弥补RabbitMQ3.0以前支持的immediate参数的功能。<br>
+
+**死信队列设置：**<br>
+首先需要设置死信队列的exchange和queue，然后进行绑定（举例如下）：<br>
+Exchange：dlx.exchange<br>
+Queue：dlx.queue<br>
+RoutingKey：#<br>
+然后我们进行正常声明交换机、队列、绑定，只不过我们需要在队列加上一个参数即可：arguments.put("x-dead-letter-exchange", "dlx.exchange") ;<br>
+这样消息在过期、requeue、队列在达到最大长度时，消息就可以直接路由到死信队列！<br>
+
+
