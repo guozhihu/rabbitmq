@@ -91,3 +91,16 @@ mandatory：如果为true，则监听器会接收到路由不可达的消息，�
 ## 自定义消费者使用
 我们一般就是在代码中编写while循环，进行consumer.nextDelivery方法进行获取下一条消息，然后进行消费处理！<br>
 但是我们使用自定义的Consumer更加的方便，解耦性更加的强，也是在实际工作中最常用的使用方式！<br>
+
+## 消费端限流
+* **什么是消费端的限流？**<br>
+假设一个场景，首先，我们RabbitMQ服务器有上万条未处理的消息，我们随便打开一个消费者客户端，会出现下面情况：
+巨量的消息瞬间全部推送过来，但是我们单个客户端无法同时处理这么多数据！
+
+* **限流策略：**<br>
+RabbitMQ提供了一种qos（服务质量保证）功能，即在非自动确认消息的前提下，如果一定数目的消息（通过基于consumer或者channel设置Qos的值）未被确认前，不进行消费新的消息。<br>
+void BasicQos(uint prefetchSize, ushort prefetchCount, bool global);<br>
+prefetchSize: 消费的单条消息的大小限制，一般设置为0，表示不限制<br>
+prefetchCount：会告诉RabbitMQ不要同时给一个消费者推送多于N个消息，即一旦有N个消息还没有ack，则该consumer将block掉，直到有消息ack<br>
+global：true/false是否将上面设置应用于channel，简单点说，就是上面限制是channel级别的还是consumer级别<br>
+
