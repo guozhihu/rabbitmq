@@ -72,3 +72,12 @@ Auto delete：如选yes，代表当最后一个监听被移除之后，该Queue�
 常用属性：delivery mode、headers(自定义属性)  
 其他属性：content_type、content_encoding、priority、correlation_id、reply_to、
 expiration、message_id、timestamp、type、user_id、app_id、cluster_id  
+
+# 深入RabbitMQ高级特性
+## Confirm确认消息
+消息的确认，是指生产者投递消息后，如果Broker收到消息，则会给我们生产者一个应答。<br>
+生产者进行接收应答，用来确定这条消息是否正常的发送到Broker，这种方式也是消息的可靠性投递的核心保障！<br>
+**如何确认Confirm确认消息**  
+第一步：在channel上开启确认模式：channel.confirmSelect()<br>
+第二步：在channel上添加监听：addConfirmListener，监听成功和失败的返回结果，根据具体的结果对消息进行重新发送、或记录日志等后续处理！<br>
+
