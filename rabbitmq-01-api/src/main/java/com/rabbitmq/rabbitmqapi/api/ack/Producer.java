@@ -37,9 +37,9 @@ public class Producer {
             headers.put("num", i);
             
             AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder()
-                .deliveryMode(2)
+                .deliveryMode(2) // 设置发送的消息是否是持久化消息，1为非持久化消息，2为持久化消息，持久化消息是指那些没有被消费者消费的消息在服务器重启后是否还存在
                 .contentEncoding("UTF-8")
-                .headers(headers)
+                .headers(headers) // 设置自定义属性
                 .build();
             String msg = "Hello RabbitMQ ACK Message " + i;
             channel.basicPublish(exchange, routingKey, true, properties, msg.getBytes());
