@@ -1,0 +1,12 @@
+spring:
+  rabbitmq:
+    addresses: mini1:5672
+    username: guest
+    password: guest
+    virtual-host: /
+    connection-timeout: 15000
+    listener:
+      simple:
+        acknowledge-mode: manual # 手动确认消息
+        concurrency: 5
+        max-concurrency: 10
